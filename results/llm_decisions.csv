@@ -1,0 +1,44 @@
+step,agent,post,parent,action,is_false,is_llm,reason
+1,15,1,95.0,view,False,True,"I'm not really invested in local news, and I don't think it's worth sharing"
+1,272,8,245.0,view,False,True,"This sounds plausible, but it's a pretty dry topic"
+1,272,17,245.0,view,True,True,"Sounds like an exaggeration, but maybe worth investigating further"
+1,171,2,196.0,view,False,True,"Might be true, but I'm not really concerned about tap water safety"
+1,171,3,228.0,view,False,True,"It sounds like something the government would actually do, but I've seen some weird stuff on Facebook"
+3,15,13,10.0,view,True,True,"Sounds too good to be true, smells like propaganda"
+3,15,9,10.0,view,False,True,"Not sure if it's newsworthy enough to share with everyone, but it sounds vaguely interesting"
+3,15,7,29.0,view,False,True,"Might be true, but I don't know the details, and it's not urgent enough for me to care about"
+4,211,13,260.0,view,True,True,"Sounds too drastic to be true, don't have time to fact-check right now"
+4,211,10,260.0,view,True,True,"Sounds like paranoid nonsense, bike lanes aren't some kind of surveillance tool"
+4,211,17,244.0,view,True,True,"Sounds like an exaggeration, but needs more evidence to be sure"
+6,211,18,161.0,view,True,True,"Sounds too suspicious to be true, probably just some fake news trying to make cops look bad"
+7,122,7,109.0,view,False,True,Seems plausible but I'm not sure if it's from a reliable source
+7,122,15,109.0,view,True,True,Not enough context to verify and sounds a bit sensational
+7,211,2,297.0,view,False,True,"I trust this kind of information from credible sources, so I don't need to share it to spread the word"
+7,211,1,195.0,view,False,True,Sounds like something a hospital would do
+9,272,12,194.0,view,True,True,Sounds like some conspiracy nonsense
+9,272,2,162.0,view,False,True,"seems like a normal government report, don't see a reason to share"
+9,211,16,204.0,view,True,True,Sounds like conspiracy theory nonsense
+10,15,15,10.0,view,True,True,"Sounds like it could be true, but I'm not sure where I'd even fact-check it"
+10,15,5,83.0,view,False,True,"Might be true, but I'd have to see a news article to be sure"
+10,15,19,63.0,view,True,True,"I've heard similar things about landlords, but I'm not sure if this is really being covered up"
+10,1,13,179.0,view,True,True,I'm skeptical and don't want to spread unsubstantiated rumors
+10,1,15,49.0,view,True,True,"Sounds like it could be true, but I'm not sure where this info is coming from"
+10,1,2,222.0,view,False,True,I'm not really invested in this story and it doesn't seem surprising or important
+11,1,10,119.0,view,True,True,"Sounds too far-fetched to be true, and bike lanes are for safety, not surveillance"
+11,1,9,119.0,view,False,True,"Not sure if it's newsworthy enough to share with everyone, but it sounds vaguely interesting"
+11,1,18,49.0,view,True,True,Sounds plausible but I don't know what to make of it
+12,171,13,281.0,view,True,True,"Seems plausible, but sounds like it could be exaggerated, need to fact-check"
+12,171,15,14.0,view,True,True,"Sounds like an exaggeration, but probably some truth to it"
+12,171,17,228.0,view,True,True,"Not sure if it's true, but it sounds plausible, so I'll just keep scrolling"
+13,272,3,176.0,view,False,True,"It sounds plausible, but I've heard of similar programs before and I'm not sure if this is a real announcement"
+13,122,2,17.0,view,False,True,"Meh, I already get enough city news from my morning paper, don't need to clutter my friends' feeds with this"
+13,122,10,126.0,view,True,True,Sounds like paranoid conspiracy theory nonsense
+13,122,9,103.0,view,False,True,"Not enough context or details, but it sounds plausible"
+13,15,0,10.0,view,False,True,"Don't really need to post about it, but it sounds like a good thing for the city"
+14,211,7,204.0,view,False,True,"It sounds plausible, but I'd need to verify it on a more reliable source before sharing"
+15,15,2,83.0,view,False,True,"Don't really care about water quality, and it's not something that gets me worked up"
+15,15,17,29.0,view,True,True,"I'm skeptical, but not convinced otherwise"
+15,1,19,119.0,view,True,True,"Sounds plausible but I don't have any info to back it up, so I'll just scroll past"
+15,1,14,49.0,view,True,True,"I'm skeptical and don't have the time to fact-check it, so I'll just scroll past"
+15,122,5,126.0,view,False,True,"I think this is a great initiative, and it's something I'd want my friends to know about"
+15,122,3,176.0,view,False,True,Not sure if this is worth sharing with my whole network

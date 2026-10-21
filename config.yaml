@@ -1,0 +1,40 @@
+# config for the misinfo simulation
+# change values here instead of touching the code
+
+seed: 42    # fixed seed so every run gives the same result
+steps: 30   # how many rounds the simulation runs
+
+agents:
+  n_agents: 300     # total people in the network
+  n_llm_agents: 0   # how many of them think with the llm, keep 0 for now
+
+# 2 communities, way more links inside a group than between groups
+# -> this is what gives us echo chambers
+network:
+  communities: 2
+  p_in: 0.05    # chance of a link between two people in the same group
+  p_out: 0.005  # chance of a link across groups (10x smaller)
+
+# posts we drop into the network at the start
+content:
+  n_true: 10
+  n_false: 10
+
+# what each person sees every round
+feed:
+  size: 5              # posts shown per round
+  ranking: engagement  # most shared first, or "chronological" for newest first
+
+# ways to fight misinfo, we compare these against "none" later
+intervention:
+  type: none              # none / fact_check / downrank / prebunk
+  fact_check_delay: 5     # rounds until false posts get a warning label
+  prebunk_fraction: 0.3   # 30% of people get "spot fake news" training
+  prebunk_boost: 0.3      # how much that training raises their media literacy
+
+# local model through ollama, no api key needed
+llm:
+  model: llama3.1:8b   # already on my laptop, bigger than 3b so a bit slower
+  url: http://localhost:11434/api/chat   # ollama's default local address
+  temperature: 0.7        # a bit of randomness so agents don't all act the same
+  max_posts_per_step: 3   # otherwise it gets really slow on cpu
