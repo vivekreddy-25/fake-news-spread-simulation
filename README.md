@@ -1,4 +1,4 @@
-# Human Behavior Modeling and Simulation
+﻿# Human Behavior Modeling and Simulation
 
 A simulation of how fake news spreads through a social network of simulated people, and which interventions actually slow it down.
 
@@ -83,8 +83,8 @@ One interesting case from testing: a low-literacy agent shared a fake post even 
 ## Run it yourself
 
 ```bash
-git clone https://github.com/vivekreddy-25/misinfo-sim.git
-cd misinfo-sim
+git clone https://github.com/vivekreddy-25/fake-news-spread-simulation.git
+cd fake-news-spread-simulation
 python -m venv .venv
 .venv\Scripts\activate          # windows
 pip install -r requirements.txt
