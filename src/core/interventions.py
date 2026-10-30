@@ -1,11 +1,5 @@
-# interventions.py
-# things a platform (or society) can do to slow down fake news
-# we run the same simulation with each one and compare the results later
-#
-#   none       -> do nothing, this is our baseline
-#   fact_check -> after a few rounds, fake posts get a warning label people can see
-#   downrank   -> after a few rounds, fake posts get pushed to the bottom of feeds (no label)
-#   prebunk    -> before anything starts, some people get trained to spot fake news
+# These are the ways the platform can try to slow fake news.
+# Each one changes the feed or how people react.
 
 
 class Intervention:
@@ -24,7 +18,7 @@ class Intervention:
             raise ValueError(f"unknown intervention type: {self.type}")
 
     def at_start(self, personas, rng):
-        # only prebunking does something before round 0
+        # Prebunking boosts media literacy before the simulation starts.
         if self.type != "prebunk":
             return
 
@@ -55,8 +49,8 @@ class Intervention:
 if __name__ == "__main__":
     import yaml
     import numpy as np
-    from src.personas import create_personas
-    from src.content import create_posts
+    from src.models.personas import create_personas
+    from src.models.content import create_posts
 
     with open("config.yaml") as f:
         cfg = yaml.safe_load(f)

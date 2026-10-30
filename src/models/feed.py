@@ -3,24 +3,19 @@
 # you only see posts that your friends have shared (like a real social media feed)
 
 def build_feed(agent_id, G, posts, seen, size, ranking="engagement", downranked=None, rng=None):
-    # agent_id   -> whose feed we're building
-    # G          -> the network from network.py
-    # seen       -> post ids this person already saw, so they don't get the same post again
-    # size       -> how many posts fit in the feed
-    # ranking    -> "engagement" (most shared first) or "chronological" (newest first)
-    # downranked -> post ids the platform wants to push down (used by an intervention later)
-
+    # Build the list of posts a person could see this round.
+    # Only friends can send posts into a feed.
     friends = set(G.neighbors(agent_id))
     if downranked is None:
         downranked = set()
 
     candidates = []
     for post in posts:
-        # skip stuff they already saw or already shared themselves
+        # Skip posts already seen or posted by the same person.
         if post.id in seen or agent_id in post.shared_by:
             continue
 
-        # find which friends shared this post and in which round
+        # Find which friends shared this post.
         friend_shares = []
         for person, step in post.shared_by.items():
             if person in friends:
@@ -28,9 +23,8 @@ def build_feed(agent_id, G, posts, seen, size, ranking="engagement", downranked=
 
         if not friend_shares:
             continue  # none of my friends shared it, so i can't see it
-        # downranked posts get way less distribution, like on real platforms
-        # 70% of the time this person just never gets it in their feed
-        # (we mark it as seen so it doesn't sneak back in a later round)
+        # Downranked posts are hidden from most people.
+        # We mark them as seen so they do not pop back in later.
         if post.id in downranked and rng is not None:
             if rng.random() < 0.7:
                 seen.add(post.id)
@@ -41,8 +35,7 @@ def build_feed(agent_id, G, posts, seen, size, ranking="engagement", downranked=
         last_step, from_friend = max(friend_shares)
         candidates.append((post, from_friend, last_step))
 
-    # sorting: False comes before True in python,
-    # so downranked posts always end up at the bottom
+    # Put downranked posts at the end, then sort by time or popularity.
     if ranking == "chronological":
         def sort_key(c):
             post, _, last_step = c
@@ -66,9 +59,9 @@ def build_feed(agent_id, G, posts, seen, size, ranking="engagement", downranked=
 if __name__ == "__main__":
     import yaml
     import numpy as np
-    from src.personas import create_personas
-    from src.network import build_network
-    from src.content import create_posts
+    from src.models.personas import create_personas
+    from src.models.network import build_network
+    from src.models.content import create_posts
 
     with open("config.yaml") as f:
         cfg = yaml.safe_load(f)

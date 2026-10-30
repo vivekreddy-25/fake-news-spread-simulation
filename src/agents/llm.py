@@ -1,10 +1,5 @@
-# agents_llm.py
-# the "agentic" part: some people make their decisions with a real language model
-# runs locally with ollama, so no api key and no cost
-#
-# it's a small langgraph workflow:
-#   build_prompt -> call_llm -> parse_decision
-#   if the llm call fails or it answers garbage -> fallback to the rule based brain
+# This agent uses a local LLM for some people.
+# If the LLM fails, it falls back to the simple rule agent.
 
 import json
 import time
@@ -13,7 +8,7 @@ from typing import Any, TypedDict
 import requests
 from langgraph.graph import StateGraph, START, END
 
-from src.agents_rule import RuleAgent
+from src.agents.rule import RuleAgent
 
 
 # everything the graph passes from one step to the next
@@ -73,6 +68,7 @@ class LLMAgent:
     # each one gets the state and returns only the parts it changed
 
     def build_prompt(self, state):
+        # Turn the person and post into a short prompt for the model.
         persona = state["persona"]
         post = state["post"]
 
@@ -162,9 +158,9 @@ class LLMAgent:
 # test with: python -m src.agents_llm
 if __name__ == "__main__":
     import numpy as np
-    from src.simulation import load_config
-    from src.personas import create_personas
-    from src.content import create_posts
+    from src.core.simulation import load_config
+    from src.models.personas import create_personas
+    from src.models.content import create_posts
 
     cfg = load_config()
     rng = np.random.default_rng(cfg["seed"])

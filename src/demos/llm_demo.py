@@ -6,12 +6,12 @@
 import argparse
 import time
 
-from src.simulation import load_config, run_simulation
-from src.metrics import compute_metrics, plot_run
+from src.core.simulation import load_config, run_simulation
+from src.analysis.metrics import compute_metrics, plot_run
 
 
 def share_rate(events, is_llm, is_false):
-    # out of all the posts this type of person saw, how many did they share
+    # Share rate = posts shared divided by posts seen.
     views = events[(events.action == "view") & (events.is_llm == is_llm) & (events.is_false == is_false)]
     shares = events[(events.action == "share") & (events.is_llm == is_llm) & (events.is_false == is_false)]
     if len(views) == 0:

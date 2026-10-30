@@ -11,11 +11,11 @@ import matplotlib
 matplotlib.use("Agg")  # same tkinter problem as in metrics.py
 import matplotlib.pyplot as plt
 
-from src.simulation import load_config, run_simulation
-from src.metrics import compute_metrics
+from src.core.simulation import load_config, run_simulation
+from src.analysis.metrics import compute_metrics
 
-# what we compare
-# baseline = no intervention + engagement feed, everything else gets compared to this
+# These are the scenarios we compare.
+# Baseline means no intervention and the normal engagement feed.
 SCENARIOS = {
     "baseline": {"intervention": "none", "ranking": "engagement"},
     "fact_check": {"intervention": "fact_check", "ranking": "engagement"},
@@ -29,6 +29,7 @@ METRICS = ["fake_shares", "true_shares", "fake_reach", "fake_depth", "believers"
 
 
 def run_experiment(base_cfg, n_seeds):
+    # Run each scenario many times with different seeds.
     rows = []
 
     for name, setup in SCENARIOS.items():
@@ -51,9 +52,7 @@ def run_experiment(base_cfg, n_seeds):
 
 
 def summarize(df):
-    # mean and 95% confidence interval for every metric per scenario
-    # ci = 1.96 * std / sqrt(n), if two scenarios' intervals don't overlap
-    # the difference is probably real and not just random luck
+    # Average each metric and add a rough 95% confidence interval.
     out = []
     for name, g in df.groupby("scenario", sort=False):
         row = {"scenario": name}
@@ -66,6 +65,7 @@ def summarize(df):
 
 
 def plot_comparison(summary, path="results/interventions.png"):
+    # Plot the mean result for each intervention.
     panels = [
         ("fake_shares", "avg shares per fake post"),
         ("fake_reach", "share of people reached per fake post"),

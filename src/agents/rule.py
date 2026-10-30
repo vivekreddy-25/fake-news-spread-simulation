@@ -1,6 +1,5 @@
-# agents_rule.py
-# simple rule based brain for the agents
-# no llm here, just probabilities, so it's fast and we can run hundreds of people
+# This agent makes choices with a simple set of rules.
+# It is fast and works well for many people.
 
 import numpy as np
 
@@ -22,6 +21,7 @@ def agreement(persona, post):
 class RuleAgent:
 
     def share_probability(self, persona, post):
+        # How likely is this person to share this post?
         p = BASE_SHARE
 
         # emotional people + dramatic posts = more sharing
@@ -43,7 +43,7 @@ class RuleAgent:
         return min(p, 1.0)
 
     def belief_change(self, persona, post):
-        # only fake posts change belief here, belief = how much they believe the fake claims
+        # Fake posts can change belief. True posts do not.
         if not post.is_false:
             return 0.0
 
@@ -68,8 +68,8 @@ class RuleAgent:
 # test with: python -m src.agents_rule
 if __name__ == "__main__":
     import yaml
-    from src.personas import create_personas
-    from src.content import create_posts
+    from src.models.personas import create_personas
+    from src.models.content import create_posts
 
     with open("config.yaml") as f:
         cfg = yaml.safe_load(f)

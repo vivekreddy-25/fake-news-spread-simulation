@@ -10,8 +10,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from src.simulation import load_config, run_simulation
-from src.metrics import compute_metrics, post_stats
+from src.core.simulation import load_config, run_simulation
+from src.analysis.metrics import compute_metrics, post_stats
 
 st.set_page_config(page_title="Misinformation Simulation", layout="wide")
 st.title("Human Behavior Modeling and Simulation")

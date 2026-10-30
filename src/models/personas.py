@@ -1,6 +1,5 @@
-# personas.py
-# this file creates all the people (agents) in the simulation
-# every person gets some random traits which later decide if they share a post or not
+# This file creates the people in the simulation.
+# Each person has traits like age, politics, and online habits.
 
 from dataclasses import dataclass
 import numpy as np
@@ -20,8 +19,7 @@ class Persona:
     is_llm: bool = False  # if true the llm decides for this person instead of the rules
 
     def describe(self):
-        # the llm can't really work with numbers like 0.31,
-        # so i convert the traits into a normal sentence for the prompt
+        # Turn numbers into a short human-style description.
         if self.leaning < -0.2:
             side = "left-leaning"
         elif self.leaning > 0.2:

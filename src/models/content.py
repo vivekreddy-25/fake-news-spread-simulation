@@ -1,6 +1,5 @@
-# content.py
-# the posts that get spread around the network
-# half of them are true, half are fake, the agents don't know which is which
+# This file holds the posts that spread in the network.
+# Half are true and half are fake.
 
 from dataclasses import dataclass, field
 
@@ -54,8 +53,7 @@ class Post:
 
 
 def pick_author(stance, personas, rng):
-    # a left-leaning post should be posted by someone from the left group and so on
-    # with 2 groups: stance < 0 -> group 0, stance >= 0 -> group 1
+    # Pick a person from the matching political side.
     groups = sorted(set(p.community for p in personas))
     if len(groups) == 1:
         candidates = personas
@@ -96,7 +94,7 @@ def create_posts(cfg, personas, rng):
 if __name__ == "__main__":
     import yaml
     import numpy as np
-    from src.personas import create_personas
+    from src.models.personas import create_personas
 
     with open("config.yaml") as f:
         cfg = yaml.safe_load(f)

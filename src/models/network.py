@@ -5,16 +5,17 @@
 import networkx as nx
 import numpy as np
 
-from src.personas import community_sizes
+from src.models.personas import community_sizes
 
 
 def build_network(cfg, rng):
+    # Build a social graph where people are more likely to know others in their own group.
     n = cfg["agents"]["n_agents"]
     k = cfg["network"]["communities"]
     p_in = cfg["network"]["p_in"]
     p_out = cfg["network"]["p_out"]
 
-    # same group sizes as in personas.py so person i = node i
+    # Keep the same group sizes as the personas file.
     sizes = community_sizes(n, k)
 
     # probability of a link between two groups

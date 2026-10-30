@@ -1,25 +1,26 @@
-# simulation.py
-# the main loop, this is where everything comes together
-# each round: people come online -> look at their feed -> decide -> beliefs change -> log it
+# This file runs the whole simulation.
+# Each round, people check posts, decide, and update their beliefs.
 
 import numpy as np
 import pandas as pd
 import yaml
 
-from src.personas import create_personas
-from src.network import build_network
-from src.content import create_posts
-from src.feed import build_feed
-from src.agents_rule import RuleAgent
-from src.interventions import Intervention
+from src.models.personas import create_personas
+from src.models.network import build_network
+from src.models.content import create_posts
+from src.models.feed import build_feed
+from src.agents.rule import RuleAgent
+from src.core.interventions import Intervention
 
 
 def load_config(path="config.yaml"):
+    # Read the setup file.
     with open(path) as f:
         return yaml.safe_load(f)
 
 
 def run_simulation(cfg, verbose=False):
+    # Build the world and run the rounds.
     # one random generator for everything -> same seed gives the exact same run
     rng = np.random.default_rng(cfg["seed"])
 
@@ -37,7 +38,7 @@ def run_simulation(cfg, verbose=False):
     # (the import is inside the if, so the rule-only runs don't need langgraph or ollama)
     llm_brain = None
     if any(p.is_llm for p in personas):
-        from src.agents_llm import LLMAgent
+        from src.agents.llm import LLMAgent
         llm_brain = LLMAgent(cfg)
 
     feed_size = cfg["feed"]["size"]

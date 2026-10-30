@@ -7,13 +7,13 @@ import copy
 import numpy as np
 import pandas as pd
 
-from src.simulation import load_config, run_simulation
-from src.agents_rule import RuleAgent
-from src.agents_llm import LLMAgent
-from src.content import Post
-from src.personas import Persona
-from src.interventions import Intervention
-from src.metrics import cascade_depths, post_stats
+from src.core.simulation import load_config, run_simulation
+from src.agents.rule import RuleAgent
+from src.agents.llm import LLMAgent
+from src.models.content import Post
+from src.models.personas import Persona
+from src.core.interventions import Intervention
+from src.analysis.metrics import cascade_depths, post_stats
 
 
 def small_config():

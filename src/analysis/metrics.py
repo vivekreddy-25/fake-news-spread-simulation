@@ -10,9 +10,8 @@ import matplotlib.pyplot as plt
 
 
 def cascade_depths(events):
-    # depth = how long the longest share chain was
-    # author posts (depth 0) -> friend shares (1) -> their friend shares (2) ...
-    # the events are already in time order, so the parent is always handled before the child
+    # Depth is the longest chain of reposts from a post.
+    # Example: post -> person shares -> friend shares again.
     depth = {}
     max_depth = {}
 
@@ -29,7 +28,7 @@ def cascade_depths(events):
 
 
 def post_stats(events):
-    # one row per post with how far it went
+    # One row for each post, with reach, depth, and share count.
     depths = cascade_depths(events)
     rows = []
 
@@ -58,8 +57,7 @@ def post_stats(events):
 
 
 def compute_metrics(result):
-    # all the important numbers of one run in a single dict
-    # (the experiment runner later collects these for lots of runs)
+    # Summarize one run into a few numbers we can compare across runs.
     events = result["events"]
     personas = result["personas"]
     n = len(personas)
@@ -70,7 +68,7 @@ def compute_metrics(result):
 
     beliefs = np.array([p.belief for p in personas])
 
-    # polarization = how far apart the groups ended up
+    # Polarization is the gap between the strongest and weakest belief groups.
     groups = sorted(set(p.community for p in personas))
     group_avg = [np.mean([p.belief for p in personas if p.community == c]) for c in groups]
 
@@ -90,6 +88,7 @@ def compute_metrics(result):
 
 
 def plot_run(result, path="results/run.png"):
+    # Save the main charts for one run.
     events = result["events"]
     beliefs = result["beliefs"]
     steps = int(beliefs.step.max())
@@ -127,7 +126,7 @@ def plot_run(result, path="results/run.png"):
 
 # test with: python -m src.metrics
 if __name__ == "__main__":
-    from src.simulation import load_config, run_simulation
+    from src.core.simulation import load_config, run_simulation
 
     cfg = load_config()
     result = run_simulation(cfg)
