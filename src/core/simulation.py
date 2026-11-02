@@ -120,7 +120,7 @@ def run_simulation(cfg, verbose=False):
     }
 
 
-# run one full simulation with: python -m src.simulation
+# run one full simulation with: python -m src.core.simulation
 if __name__ == "__main__":
     cfg = load_config()
     print(f"intervention: {cfg['intervention']['type']}, ranking: {cfg['feed']['ranking']}\n")

@@ -155,7 +155,7 @@ class LLMAgent:
         return out["decision"]
 
 
-# test with: python -m src.agents_llm
+# test with: python -m src.agents.llm
 if __name__ == "__main__":
     import numpy as np
     from src.core.simulation import load_config
