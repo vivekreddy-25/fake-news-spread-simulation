@@ -99,10 +99,10 @@ ollama pull llama3.1:8b
 Then run:
 
 ```bash
-python -m src.simulation         # one run with a summary
-python -m src.metrics            # metrics and charts in results/
-python -m src.experiment         # all scenarios across 10 seeds
-python -m src.llm_demo           # run with 6 LLM agents (about 5 minutes)
+python -m src.core.simulation     # one run with a summary
+python -m src.analysis.metrics    # metrics and charts in results/
+python -m src.analysis.experiment # all scenarios across 10 seeds
+python -m src.demos.llm_demo      # run with 6 LLM agents (about 5 minutes)
 streamlit run app.py             # dashboard
 python -m pytest -v              # tests
 ```
