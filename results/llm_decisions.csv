@@ -16,7 +16,7 @@ step,agent,post,parent,action,is_false,is_llm,reason
 6,1,18,49.0,view,True,True,Sounds plausible but I don't know enough to get worked up about it
 6,1,9,119.0,view,False,True,"It sounds like a positive step for the environment, but I've seen some questionable claims about university initiatives before"
 6,1,14,130.0,view,True,True,I'm skeptical of claims without evidence or credible sources
-7,171,13,273.0,view,True,True,"It sounds plausible, but it's hard to know for sure without more info"
+7,171,13,273.0,view,True,True,"It sounds plausible, but it's just a rumor, not sure if it's true"
 7,211,7,156.0,view,False,True,"Airport train updates are usually transparent and publicized by the airport or transit authority, so I think this is likely accurate"
 7,211,12,204.0,view,True,True,"Sounds like more anti-government propaganda, probably not based on any real evidence"
 8,122,7,109.0,view,False,True,Seems plausible but I'm not sure if it's from a reliable source
@@ -35,13 +35,13 @@ step,agent,post,parent,action,is_false,is_llm,reason
 12,15,16,10.0,view,True,True,Sounds like an unsubstantiated claim to me
 12,272,16,268.0,view,True,True,"Sounds like an unsubstantiated claim from a disgruntled person, not enough evidence to back it up"
 13,211,15,156.0,view,True,True,"Sounds like alarmist nonsense, needs corroboration from a credible source"
-13,171,7,283.0,view,False,True,"I'm not really sure about the frequency of the train, but I'm not going to get worked up about it"
+13,171,7,283.0,view,False,True,"Sounds like one of those vague announcements I've heard before, but don't know the details"
 13,1,17,179.0,view,True,True,Sounds like an unfounded conspiracy theory about a library program
 14,122,10,17.0,view,True,True,Sounds like paranoid conspiracy theory nonsense
 14,122,18,176.0,view,True,True,"This sounds like a plausible policy change, but I'd want to see more evidence before confirming it's true"
 14,122,13,23.0,view,True,True,Sounds like clickbait and I haven't seen any credible sources confirm it
-14,15,5,10.0,view,False,True,I've heard about the library's initiatives to support kids and this sounds like a positive step
+14,15,5,10.0,view,False,True,"This sounds like a positive thing for the community, but I've seen some shady stuff from the government lately, so I'm not entirely sure it's not some kind of PR stunt"
 14,272,19,162.0,view,True,True,"Sounds like another conspiracy theory to me, but not strongly enough to convince me otherwise"
-15,122,0,8.0,view,False,True,"I'm not sure if I've heard about this specific proposal before, but bike lanes are usually a good thing"
-15,122,3,146.0,view,False,True,"This sounds like a legitimate announcement from the city, but I'd want to double-check the details before sharing"
-15,15,3,29.0,view,False,True,I've heard about tax relief programs for small businesses before and it sounds like a good thing
+15,122,0,8.0,view,False,True,"I've heard similar claims before, need more info to confirm"
+15,122,3,146.0,view,False,True,"I've heard of tax relief programs before, but I'll need to look into the specifics before sharing"
+15,15,3,29.0,view,False,True,"I'm not sure if this is actually happening, but it sounds like a good thing for small business owners"

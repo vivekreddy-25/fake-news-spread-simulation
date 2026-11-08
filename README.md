@@ -104,6 +104,8 @@ It connected two separate fake posts into one story, which is how conspiracy thi
 
 This is a first result from one seed and about 45 LLM decisions per run, not a proven effect. Every decision with its memory context is saved in `results/llm_decisions_memory.csv`.
 
+In this run, 4 of the 46 LLM decisions came with a reminder that the agent had already seen a post on the same topic; these didn't change any share decisions, only belief slightly.
+
 ## Run it yourself
 
 ```bash

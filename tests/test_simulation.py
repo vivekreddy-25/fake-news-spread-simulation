@@ -175,6 +175,32 @@ def test_failed_reflection_keeps_old_summary_and_does_not_crash():
     assert agent.stats["reflection_failures"] == 1
 
 
+def test_seen_before_matches_by_topic_not_post_id():
+    # feed.py never shows the same post id twice, so seen_before has to go by topic instead
+    cfg = small_config()
+    cfg["llm"]["url"] = "http://localhost:1/api/chat"
+    cfg["llm"]["memory"] = True
+    agent = LLMAgent(cfg)
+    person = make_person(0.5)
+    rng = np.random.default_rng(0)
+
+    first_post = Post(id=0, text="first claim about bike lanes", is_false=True,
+                       stance=0.5, emotionality=0.8, author=1, topic="bike lanes")
+    agent.decide(person, first_post, rng)
+
+    # different post id, same topic -> should count as seen before
+    same_topic_post = Post(id=1, text="another claim about bike lanes", is_false=True,
+                            stance=0.5, emotionality=0.8, author=2, topic="bike lanes")
+    state = agent.recall({"persona": person, "post": same_topic_post})
+    assert state["seen_before"] is True
+
+    # different topic entirely -> should not be flagged
+    other_post = Post(id=2, text="a claim about the hospital", is_false=True,
+                       stance=0.5, emotionality=0.8, author=3, topic="hospital")
+    state = agent.recall({"persona": person, "post": other_post})
+    assert state["seen_before"] is False
+
+
 def test_cascade_depth_on_hand_made_log():
     # person 1 posts -> person 2 shares from 1 -> person 3 shares from 2
     # so the longest chain is 2

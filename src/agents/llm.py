@@ -94,8 +94,10 @@ class LLMAgent:
         post = state["post"]
         mem_list = self.memory.get(persona.id, [])
 
-        # same post id showing up again just means a different friend shared it too
-        seen_before = any(m["post_id"] == post.id for m in mem_list)
+        # feed.py never shows the exact same post twice, but two different posts
+        # can still be about the same story (eg two separate fake claims about bike lanes)
+        # so we match on topic instead of post id
+        seen_before = bool(post.topic) and any(m.get("topic") == post.topic for m in mem_list)
 
         return {
             # copy it - save_memory mutates self.memory[persona.id] in place later,
@@ -222,6 +224,7 @@ class LLMAgent:
         entry = {
             "post_id": post.id,
             "post_text": post.text,
+            "topic": post.topic,
             "shared": decision["share"],
             "belief": state.get("believe", 0.0),
             "reason": decision["reason"],
