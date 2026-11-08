@@ -1,13 +1,13 @@
 step,agent,post,parent,action,is_false,is_llm,reason
-1,15,1,95.0,view,False,True,"I'm not really invested in local news, and I don't think it's worth sharing"
+1,15,1,95.0,view,False,True,I'm not sure if this is newsworthy or just a publicity stunt
 1,272,8,245.0,view,False,True,"This sounds plausible, but it's a pretty dry topic"
 1,272,17,245.0,view,True,True,"Sounds like an exaggeration, but maybe worth investigating further"
-1,171,2,196.0,view,False,True,"Might be true, but I'm not really concerned about tap water safety"
+1,171,2,196.0,view,False,True,"Might be true, but don't really care about water quality"
 1,171,3,228.0,view,False,True,"It sounds like something the government would actually do, but I've seen some weird stuff on Facebook"
 3,15,13,10.0,view,True,True,"Sounds too good to be true, smells like propaganda"
 3,15,9,10.0,view,False,True,"Not sure if it's newsworthy enough to share with everyone, but it sounds vaguely interesting"
 3,15,7,29.0,view,False,True,"Might be true, but I don't know the details, and it's not urgent enough for me to care about"
-4,211,13,260.0,view,True,True,"Sounds too drastic to be true, don't have time to fact-check right now"
+4,211,13,260.0,view,True,True,"Sounds too drastic to be true, probably just sensationalism"
 4,211,10,260.0,view,True,True,"Sounds like paranoid nonsense, bike lanes aren't some kind of surveillance tool"
 4,211,17,244.0,view,True,True,"Sounds like an exaggeration, but needs more evidence to be sure"
 6,211,18,161.0,view,True,True,"Sounds too suspicious to be true, probably just some fake news trying to make cops look bad"

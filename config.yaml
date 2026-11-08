@@ -38,3 +38,6 @@ llm:
   url: http://localhost:11434/api/chat   # ollama's default local address
   temperature: 0.7        # a bit of randomness so agents don't all act the same
   max_posts_per_step: 3   # otherwise it gets really slow on cpu
+  memory: true          # turn memory + reflection on/off
+  memory_size: 5        # how many past decisions go in the prompt
+  reflect_every: 5      # rounds between reflections

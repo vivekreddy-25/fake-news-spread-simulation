@@ -36,9 +36,11 @@ personas -> social network -> posts (10 true, 10 fake)
 
 **Two decision systems, same interface:**
 - `RuleAgent`: decides whether to share based on emotion, agreement with the post, media literacy, and any label shown on the post. This is fast enough for hundreds of agents.
-- `LLMAgent`: uses a LangGraph flow that builds a prompt, calls the LLM, and parses the response. If Ollama is down or the output is not valid JSON, it falls back to the rule-based agent so the simulation keeps running. It also gives a reason for each decision.
+- `LLMAgent`: uses a LangGraph flow that recalls memory, builds a prompt, calls the LLM, and parses the response. If Ollama is down or the output is not valid JSON, it falls back to the rule-based agent so the simulation keeps running. It also gives a reason for each decision.
 
 Both agents follow the same `decide()` method, so the rest of the simulation does not need to know which kind of brain is making the choice.
+
+**Memory + reflection:** each LLM agent remembers its last few decisions (what it saw, whether it shared, and why) and gets reminded if it's seeing a similar claim again. Every few rounds it also reflects: one extra LLM call that sums up what it now believes about the rumours in its city, in its own words, which then gets folded into later prompts. This is all optional (`llm.memory` in `config.yaml`) and never crashes the run - a failed reflection just keeps the agent's previous view.
 
 ## Results
 
@@ -80,6 +82,28 @@ After calibration, the LLM agents were much better at telling true from fake. Th
 
 One interesting test case: a low-literacy agent still shared a fake post even with a fact-check label on it, because they said, "I hate bike lanes anyway." The rule agents do not do this, because a label always reduces sharing. This looks a lot like motivated reasoning in real human behavior.
 
+### Memory and reflection
+
+With memory on, agents stop treating every post as if they'd never seen anything before. They recall their last few decisions and occasionally reflect on what they now believe about the rumours in their city, and that view carries into later prompts.
+
+I ran the same simulation twice (6 LLM agents, 15 rounds, same seed), once with memory and once without:
+
+| | Fake share rate | True share rate |
+|---|---|---|
+| LLM agents, memory off | 5% | 14% |
+| LLM agents, memory on | 33% | 56% |
+| Rule agents, same runs | 17-19% | 17-18% |
+
+The surprise: memory made the LLM agents share a lot more, both fake and true posts. A possible cause (not proven) is that listing past decisions in the prompt pushes the model to stay consistent with what it did before, so one early share leads to more, which partly undoes the calibration above. It also moved the whole network, even though only 6 of 300 people are LLM agents: 54% of people ended up believing fake claims, against 39% without memory.
+
+The reflections show belief drift. After a few rounds, one agent wrote:
+
+> "I think the police are probably trying to cover up something, and I'm not surprised they'd try to fudge the numbers. It's just like what they did with that airport train, probably some shady dealings behind the scenes."
+
+It connected two separate fake posts into one story, which is how conspiracy thinking tends to build up. Another agent, who started out sceptical, stayed sceptical.
+
+This is a first result from one seed and about 45 LLM decisions per run, not a proven effect. Every decision with its memory context is saved in `results/llm_decisions_memory.csv`.
+
 ## Run it yourself
 
 ```bash
@@ -99,12 +123,13 @@ ollama pull llama3.1:8b
 Then run:
 
 ```bash
-python -m src.core.simulation     # one run with a summary
-python -m src.analysis.metrics    # metrics and charts in results/
-python -m src.analysis.experiment # all scenarios across 10 seeds
-python -m src.demos.llm_demo      # run with 6 LLM agents (about 5 minutes)
-streamlit run app.py             # dashboard
-python -m pytest -v              # tests
+python -m src.core.simulation               # one run with a summary
+python -m src.analysis.metrics              # metrics and charts in results/
+python -m src.analysis.experiment           # all scenarios across 10 seeds
+python -m src.demos.llm_demo                # 6 LLM agents with memory (about 8 minutes)
+python -m src.demos.llm_demo --memory off   # same run without memory (about 5 minutes)
+streamlit run app.py                        # dashboard
+python -m pytest -v                         # tests
 ```
 
 All of the settings are in `config.yaml`.
@@ -114,29 +139,29 @@ All of the settings are in `config.yaml`.
 ```
 src/
   agents/
-    __init__.py     exports the rules and llm agents
-    rule.py         rule-based decision logic
-    llm.py          LangGraph + Ollama agent with fallback
+    __init__.py      exports the rule and llm agents
+    rule.py          rule-based decision logic
+    llm.py           LangGraph + Ollama agent with memory, reflection and fallback
   models/
-    __init__.py     exports model objects and helpers
-    personas.py     agent traits and behavior
-    network.py      social network with two communities
-    content.py      true and fake posts
-    feed.py         what each person sees in their feed
+    __init__.py      exports model objects and helpers
+    personas.py      agent traits and behavior
+    network.py       social network with two communities
+    content.py       true and fake posts
+    feed.py          what each person sees in their feed
   analysis/
-    __init__.py     analysis helpers
-    metrics.py      reach, cascade depth, belief, polarization
-    experiment.py   runs scenarios across many seeds
+    __init__.py      analysis helpers
+    metrics.py       reach, cascade depth, belief, polarization
+    experiment.py    runs scenarios across many seeds
   core/
-    __init__.py     app-level simulation helpers
-    simulation.py   main simulation loop
+    __init__.py      app-level simulation helpers
+    simulation.py    main simulation loop
     interventions.py fact-checking, downranking, prebunking
   demos/
-    __init__.py     example runner exports
-    llm_demo.py     compares LLM agents with rule-based agents
-app.py              Streamlit dashboard
-tests/              pytest tests (do not require Ollama)
-results/            output charts and CSV files
+    __init__.py      marks the folder as a package
+    llm_demo.py      compares LLM agents with rule-based agents, with or without memory
+app.py               Streamlit dashboard
+tests/               pytest tests (do not require Ollama)
+results/             output charts and CSV files
 ```
 
 ## Limitations
@@ -144,7 +169,7 @@ results/            output charts and CSV files
 - The agents are fictional and not calibrated against real user data.
 - There are only 20 posts, so ranking changes do not matter much. That is likely why the chronological feed result is not very meaningful.
 - Fact-checking catches every fake post after 5 rounds, which is a best-case scenario.
-- The LLM results are based on a small sample, around 40 decisions from 6 agents, and they change a lot depending on prompt wording.
+- The LLM results are based on a small sample, around 40-45 decisions from 6 agents, and they change a lot depending on prompt wording.
 - Belief is simplified to a single number per person for each fake claim.
 
 ## What I would do next
@@ -152,4 +177,5 @@ results/            output charts and CSV files
 - Add many more posts so feed ranking matters more
 - Compare the results to a basic SIR epidemic model
 - Run more LLM agents with a faster model and more seeds for prebunking
+- Test whether the memory over-sharing comes from recalling past share decisions, by recalling only beliefs instead
 - Calibrate the network and spread behavior against a real dataset such as FakeNewsNet

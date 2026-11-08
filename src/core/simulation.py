@@ -110,6 +110,10 @@ def run_simulation(cfg, verbose=False):
             n_shares = sum(1 for e in events if e["step"] == step and e["action"] == "share")
             print(f"round {step:2d}: {n_shares} shares")
 
+        # memory/reflection is a no-op unless llm_brain exists and memory is turned on
+        if llm_brain is not None:
+            llm_brain.maybe_reflect(personas, step)
+
     return {
         "events": pd.DataFrame(events),
         "beliefs": pd.DataFrame(beliefs),
@@ -117,6 +121,7 @@ def run_simulation(cfg, verbose=False):
         "posts": posts,
         "graph": G,
         "llm_stats": llm_brain.stats if llm_brain else None,  # how many llm calls / fallbacks
+        "llm_brain": llm_brain,  # the agent itself, so callers can look at memory/reflections
     }
 
 

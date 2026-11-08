@@ -103,6 +103,78 @@ def test_llm_agent_handles_broken_json():
     assert "error" in out
 
 
+def test_memory_stays_capped():
+    # should never grow past memory_size, even after way more decisions than that
+    cfg = small_config()
+    cfg["llm"]["url"] = "http://localhost:1/api/chat"
+    cfg["llm"]["memory"] = True
+    cfg["llm"]["memory_size"] = 3
+    agent = LLMAgent(cfg)
+    person = make_person(0.5)
+    rng = np.random.default_rng(0)
+
+    for _ in range(6):
+        agent.decide(person, make_fake_post(), rng)
+
+    assert len(agent.memory[person.id]) == 3
+
+
+def test_fallback_decisions_are_saved_to_memory_as_fallback():
+    cfg = small_config()
+    cfg["llm"]["url"] = "http://localhost:1/api/chat"
+    cfg["llm"]["memory"] = True
+    agent = LLMAgent(cfg)
+    person = make_person(0.5)
+    rng = np.random.default_rng(0)
+
+    agent.decide(person, make_fake_post(), rng)
+
+    assert agent.memory[person.id][0]["fallback"] is True
+
+
+def test_memory_off_gives_the_same_prompt_as_memory_on_with_nothing_to_recall():
+    # memory off should never touch the prompt, not even when there happens to be
+    # nothing to recall yet - the only way to be sure is to compare against memory on
+    cfg = small_config()
+    cfg["llm"]["url"] = "http://localhost:1/api/chat"
+    cfg["llm"]["memory"] = False
+    off_agent = LLMAgent(cfg)
+
+    cfg_on = copy.deepcopy(cfg)
+    cfg_on["llm"]["memory"] = True
+    on_agent = LLMAgent(cfg_on)
+
+    person = make_person(0.5)
+    post = make_fake_post()
+
+    off_state = {"persona": person, "post": post, **off_agent.recall({"persona": person, "post": post})}
+    on_state = {"persona": person, "post": post, **on_agent.recall({"persona": person, "post": post})}
+
+    off_prompt = off_agent.build_prompt(off_state)["prompt"]
+    on_prompt = on_agent.build_prompt(on_state)["prompt"]
+
+    assert off_prompt == on_prompt
+    assert "Recently you saw" not in off_prompt
+
+
+def test_failed_reflection_keeps_old_summary_and_does_not_crash():
+    cfg = small_config()
+    cfg["llm"]["url"] = "http://localhost:1/api/chat"
+    cfg["llm"]["memory"] = True
+    agent = LLMAgent(cfg)
+    person = make_person(0.5)
+    rng = np.random.default_rng(0)
+
+    for _ in range(3):  # reflect() needs at least 3 memories to even try
+        agent.decide(person, make_fake_post(), rng)
+
+    agent.reflections[person.id] = "old view"
+    agent.reflect(person, step=5)  # same broken url, so this has to fail
+
+    assert agent.reflections[person.id] == "old view"
+    assert agent.stats["reflection_failures"] == 1
+
+
 def test_cascade_depth_on_hand_made_log():
     # person 1 posts -> person 2 shares from 1 -> person 3 shares from 2
     # so the longest chain is 2
